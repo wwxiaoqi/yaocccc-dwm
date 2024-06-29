@@ -187,6 +187,29 @@ yay -S wqy-microhei
 
 请检查DWM变量是否正确设置，如果实在不行了，可以直接强制改config.h 里的 autostartscript 和 statusbarscript 变量
 
+8. SchemeBar 配置中的 NULL 直接赋值给 unsigned int 类型导致的问题解决方法
+
+如果出现以下的报错提示：  
+
+```make
+config.h:43:26: error: initialization of ‘unsigned int’ from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+   43 |     [SchemeBarEmpty] = { NULL, 0x11, NULL },
+      |                          ^~~~
+```
+
+你只需要将 SchemeBar 中的 NULL 替换为 OPAQUE 即可解决。
+
+```diff
+$ diff config_bak.h config.h 
+
+43,44c43,44
+<     [SchemeBarEmpty] = { NULL, 0x11, NULL },
+<     [SchemeStatusText] = { OPAQUE, 0x88, NULL },
+---
+>     [SchemeBarEmpty] = { OPAQUE, 0x11, OPAQUE },
+>     [SchemeStatusText] = { OPAQUE, 0x88, OPAQUE },
+```
+
 ## 贡献者 THX 🌻
 
 - [yaocccc](https://github.com/yaocccc)
